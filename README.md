@@ -40,7 +40,7 @@ To run the app in development mode, use the following command:
 npm run dev
 ```
 
-This will start a local development server, and you can access the app in your browser at [http://localhost:3000](http://localhost:5173/).
+This will start a local development server, and you can access the app in your browser at [http://localhost:5173](http://localhost:5173/).
 
 ---
 

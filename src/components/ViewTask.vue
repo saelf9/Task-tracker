@@ -1,15 +1,10 @@
 <template>
   <div class="view-task">
-    <div class="task-container">
-      <textarea
-          v-model="taskName"
-          class="task-input"
-          placeholder="What’s your task?">{{ task.name }}</textarea>
-      <div class="button-container">
-        <button @click="updateTask" class="btn btn-primary">Update</button>
-        <button @click="deleteTask" class="btn btn-danger">Delete</button>
-      </div>
-    </div>
+    <textarea
+        v-model="taskName"
+        class="task-input"
+        placeholder="Edit your task">{{ task.name }}</textarea>
+    <button @click="deleteTask" class="btn btn-danger">Delete</button>
   </div>
 </template>
 
@@ -31,14 +26,6 @@ export default {
         this.$emit("updateTask");
       } catch (error) {
         console.error("Error deleting task:", error);
-      }
-    },
-    async updateTask() {
-      try {
-        await api.updateTask(this.task.id, this.taskName, this.userId);
-        this.$emit("updateTask");
-      } catch (error) {
-        console.error("Error updating task:", error);
       }
     }
   },
@@ -66,12 +53,6 @@ body {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.task-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .task-input {
   width: 100%;
   height: 120px;
@@ -97,48 +78,16 @@ body {
   background-color: #ffffff; /* White background when focused */
 }
 
-.button-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.btn {
-  width: 48%;
-  padding: 12px;
-  border-radius: 25px;
-  font-weight: bold;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  border: none;
-}
-
-.btn-primary {
-  background-color: #ff78a7; /* Soft pink button */
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #ff4d94; /* Darker pink on hover */
-}
-
 .btn-danger {
-  background-color: #ffb3c1; /* Light pinkish red button */
+  background-color: #dc3545;
+  border-color: #dc3545;
   color: white;
+  transition: background-color 0.3s ease;
 }
 
 .btn-danger:hover {
-  background-color: #ff66a3; /* Darker pinkish red on hover */
-}
-
-@media (max-width: 600px) {
-  .view-task {
-    margin: 20px;
-    padding: 15px;
-  }
-  .btn {
-    width: 100%;
-    margin-top: 10px;
-  }
+  background-color: #c82333;
+  border-color: #c82333;
+  box-shadow: 0 0 10px rgba(220, 53, 69, 0.5);
 }
 </style>

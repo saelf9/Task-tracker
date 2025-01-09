@@ -1,14 +1,8 @@
 <template>
   <div class="create-task">
-    <div class="task-container">
-      <textarea
-          v-model="taskName"
-          class="task-input"
-          placeholder="What’s your new task?">{{ taskName }}</textarea>
-      <div class="button-container">
-        <button @click="createTask" class="btn btn-primary">Create Task</button>
-      </div>
-    </div>
+    <h1>New Task</h1>
+    <textarea id="taskInput" v-model="taskName" class="task-input" placeholder="Enter task name"></textarea> <!-- Added task-input class here -->
+    <button @click="createTask" class="btn btn-primary">Create Task</button>
   </div>
 </template>
 
@@ -16,17 +10,24 @@
 import * as api from "@/assets/API.js";
 
 export default {
-  name: "CreateTask",
+  name: `CreateTask`,
   data() {
     return {
       taskName: ""
     };
   },
+  props: ["userId", "addTask"],
   methods: {
     async createTask() {
       try {
-        const newTask = await api.createTask(this.taskName, this.userId);
-        this.$emit("taskCreated", newTask); // Emit event to notify parent component
+        // Check if taskName is not empty
+        if (this.taskName.trim() !== "") {
+          const newTask = await api.createTask(this.taskName, this.userId);
+          this.taskName = "";
+          this.addTask(newTask);
+        } else {
+          console.error("Task name cannot be empty");
+        }
       } catch (error) {
         console.error("Error creating task:", error);
       }
@@ -42,6 +43,10 @@ body {
   font-family: 'Poppins', sans-serif; /* Cuter font for the whole page */
   margin: 0;
   padding: 0;
+}
+.create-task h1 {
+  font-family: 'Lobster', cursive; /* Change to any font you like */
+  color: #ff69b4; /* Hot pink color for the heading */
 }
 
 .create-task {
@@ -112,9 +117,11 @@ body {
     margin: 20px;
     padding: 15px;
   }
+
   .btn {
     width: 100%;
     margin-top: 10px;
   }
 }
+
 </style>

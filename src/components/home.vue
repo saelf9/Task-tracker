@@ -1,50 +1,54 @@
 <template>
-  <div class="home">
-    <h1 class="title">Welcome to Your Task Manager</h1>
-    <div class="task-container">
-      <create-task :userId="userId" @taskCreated="loadTasks" />
-      <div v-if="tasks.length" class="task-list">
-        <div
-            v-for="task in tasks"
-            :key="task.id"
-            class="task-item">
-          <view-task :task="task" :userId="userId" @updateTask="loadTasks"/>
-        </div>
-      </div>
-      <p v-else>No tasks to show!</p>
+  <div class="home"> <!-- Added the home class here -->
+    <CreateTask :userId="userId" :addTask="addTask" />
+    <h1 class="title">Tasks</h1> <!-- Added the title class -->
+    <div class="task-list"> <!-- Added task-list class here -->
+      <ViewTask
+          v-for="task of tasks"
+          :key="task.id"
+          :task="task"
+          :userId="userId"
+          @updateTask="onUpdateTask"
+          class="task-item"/>
     </div>
   </div>
 </template>
 
 <script>
+import * as api from "@/assets/API.js";
 import CreateTask from "@/components/CreateTask.vue";
 import ViewTask from "@/components/ViewTask.vue";
-import * as api from "@/assets/API.js";
 
 export default {
   name: "Home",
-  components: {
-    CreateTask,
-    ViewTask
-  },
+  components: {CreateTask, ViewTask},
   data() {
     return {
-      userId: 1, // Sample user ID
-      tasks: []
+      tasks: [],
+      userId: ""
     };
   },
-  methods: {
-    async loadTasks() {
-      try {
-        const tasks = await api.getTasks(this.userId);
-        this.tasks = tasks;
-      } catch (error) {
-        console.error("Error loading tasks:", error);
-      }
+  async created() {
+    try {
+      this.userId = await api.createUser();
+      this.tasks = await api.getTasks(this.userId);
+    } catch (error) {
+      console.error("Error initializing data:", error);
+      // Handle error
     }
   },
-  created() {
-    this.loadTasks();
+  methods: {
+    addTask(task) {
+      this.tasks.push(task);
+    },
+    async onUpdateTask() {
+      try {
+        this.tasks = await api.getTasks(this.userId);
+      } catch (error) {
+        console.error("Error updating tasks:", error);
+        // Handle error
+      }
+    }
   }
 };
 </script>
@@ -88,6 +92,17 @@ body {
 
 .task-item {
   margin-bottom: 20px;
+  background-color: #fce4ec; /* Light pastel pink for task item background */
+  padding: 15px;
+  border-radius: 10px; /* Rounded corners for task items */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.task-item p {
+  color: #e91e63; /* Cute pink color for task text */
+  font-size: 18px;
+  font-family: 'Lobster', cursive; /* Playful font */
+  margin: 0;
 }
 
 p {

@@ -1,4 +1,4 @@
-# ** Task Manager App**
+# **Task Manager App**
 
 This is a simple task manager app built using **Vue 3** and **Vite**. It allows users to create, view, update, and delete tasks. The app has a **cute pink aesthetic**, a soft color palette for a delightful user experience. 
 
